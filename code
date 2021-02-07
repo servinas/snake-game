@@ -1,0 +1,94 @@
+import turtle as t
+import time as s
+import random as r
+#screen setup
+nw= t.Screen()
+nw.title("snake game")
+nw.bgcolor("blue")
+nw.setup(width=600 ,height=600)
+nw.tracer(0)
+#head
+head = t.Turtle()
+head.color("red")
+head.shape("square")
+head.penup()
+head.speed(0)
+head.goto(0,0)
+head.direction="stop"
+segments =[]
+#food
+food = t.Turtle()
+food.color("black")
+food.shape("circle")
+food.penup()
+food.speed(0)
+food.goto(0,100)
+
+def go_up():
+    head.direction="up"
+def go_down():
+    head.direction="down"
+def go_left():
+    head.direction="left"
+def go_right():
+    head.direction="right"
+def move():
+    if head.direction == "up":
+        y=head.ycor()
+        head.sety(y+20)
+    if head.direction == "down":
+        y = head.ycor()
+        head.sety(y-20)
+    if head.direction == "left":
+        x= head.xcor()
+        head.setx(x - 20)
+    if head.direction == "right":
+        x = head.xcor()
+        head.setx(x + 20)
+nw.listen()
+nw.onkeypress(go_up,'8')
+nw.onkeypress(go_down,'2')
+nw.onkeypress(go_right,'6')
+nw.onkeypress(go_left,'4')
+while True:
+    nw.update()
+    if head.xcor()>290 or head.xcor()<-290 or head.ycor()>290 or head.ycor()<-290:
+        s.sleep(0.1)
+        head.goto(0,0)
+        head.direction="stop"
+        for segment in segments:
+            segment.goto(1000,1000)
+        segments.clear()
+    if head.distance(food)<20:
+        x=r.randint(-290,290)
+        y=r.randint(-290,290)
+        food.goto(x,y)
+        new_segment = t.Turtle()
+        new_segment.color("gray")
+        new_segment.shape("square")
+        new_segment.penup()
+        segments.append(new_segment)
+        # move the end body first in reverse order
+    for index in range(len(segments) - 1, 0, -1):
+            x = segments[index - 1].xcor()
+            y = segments[index - 1].ycor()
+            segments[index].goto(x, y)
+        # move body [0] to where head is
+    if len(segments) > 0:
+            x = head.xcor()
+            y = head.ycor()
+            segments[0].goto(x, y)
+    move()
+    # check for head collision with the body
+    for segment in segments:
+        if segment.distance(head) < 20:
+            s.sleep(1)
+            head.goto(0, 0)
+            head.direction = "stop"
+            # hide the body
+            for segment in segments:
+                segment.goto(1000, 1000)
+            # clear the body list
+            segments.clear()
+    s.sleep(0.1)
+nw.mainloop()
