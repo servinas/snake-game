@@ -1,0 +1,9 @@
+import os 
+import shutil as s
+current_dir= os.path.dirname(os.path.realpath(_file_))
+for file_name in os.listdir(current_dir);
+   if file_name.endswith(("png","jpg")):
+      if not os.path.exists("pic"):
+         os.mkdir("pic")
+     s.copy(file_name ,"pic")
+     os.remove(file_name)
